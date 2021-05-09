@@ -20,3 +20,22 @@ exBERT is based on the [paper](https://www.aclweb.org/anthology/2020.findings-em
 6. `bash run_exbert_create_vocab.sh`
 7. Update the parameters in settings_exbert.yml.
 8. `bash run_exbert_pretraining.sh`
+
+#### Data
+The `lm_pretrain.src.bert_pretrainer.BERTPreTrainer` and `lm_pretrain.src.exBERT.exBERTPreTrainer` classes use the custom `lm_pretrain.src.datasets.chats.ChatDataset` class to load chat conversations data. This data must be formatted as follows:
+
+```
+sentence 1  # conversation 1
+sentence 2
+            # newline separates each chat conversation
+sentence 1  # conversation 2
+sentence 2
+sentence 3
+
+sentence 1
+...
+```
+
+You can also replace this `Dataset` class with your own. The output of the `Dataset` class must be a tuple of two values:
+1. `torch.tensor(tokenized_text_pair)` where `tokenized_text_pair` is the encoded output of the `transformers.tokenizer` with `text` and `text_pair` arguments.
+2. `is_next_random` which can be either 1 or 0.
